@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AU-DESSUS — qu'est-ce qui vole sur ta tête ?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0f0d;
+  --panel:#101814;
+  --line:#1c2a22;
+  --phosphor:#5dff9c;
+  --phosphor-dim:#2e8a55;
+  --amber:#ffb84d;
+  --text:#cfe8d8;
+  --muted:#6e8a7a;
+  --danger:#ff6a5e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'IBM Plex Mono',monospace;
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse at 50% -20%, rgba(93,255,156,.06), transparent 60%),
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.18) 3px 4px);
+}
+header{
+  border-bottom:1px solid var(--line);
+  padding:1.2rem 1.4rem .9rem;
+  display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;
+}
+h1{
+  font-family:'Big Shoulders Display',sans-serif;
+  font-weight:900;font-size:clamp(2rem,7vw,3.2rem);
+  letter-spacing:.04em;color:var(--phosphor);
+  text-shadow:0 0 18px rgba(93,255,156,.35);
+}
+header small{color:var(--muted);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+main{max-width:680px;margin:0 auto;padding:1.2rem 1rem 3rem}
+.status{
+  font-size:.78rem;color:var(--muted);letter-spacing:.08em;
+  padding:.6rem .2rem;display:flex;justify-content:space-between;gap:.6rem;flex-wrap:wrap;
+}
+.status .blink{animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+@media (prefers-reduced-motion: reduce){.blink{animation:none}}
+
+/* Radar */
+.radar-wrap{display:flex;justify-content:center;padding:.6rem 0 1.2rem}
+.radar{position:relative;width:min(78vw,300px);aspect-ratio:1;border-radius:50%;
+  border:1px solid var(--phosphor-dim);
+  background:
+    radial-gradient(circle, rgba(93,255,156,.05) 0%, transparent 70%),
+    repeating-radial-gradient(circle, transparent 0 24%, rgba(93,255,156,.12) 24% calc(24% + 1px));
+  box-shadow:inset 0 0 40px rgba(93,255,156,.06), 0 0 30px rgba(93,255,156,.05);
+}
+.radar::before,.radar::after{content:"";position:absolute;background:rgba(93,255,156,.12)}
+.radar::before{left:50%;top:0;width:1px;height:100%}
+.radar::after{top:50%;left:0;height:1px;width:100%}
+.sweep{position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg, rgba(93,255,156,.28), transparent 18%);
+  animation:sweep 4s linear infinite;mix-blend-mode:screen}
+@keyframes sweep{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.sweep{animation:none;opacity:.25}}
+.blip{position:absolute;width:9px;height:9px;border-radius:50%;
+  background:var(--phosphor);box-shadow:0 0 8px var(--phosphor);
+  transform:translate(-50%,-50%);transition:left 1s,top 1s}
+.you{position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;
+  background:#fff;transform:translate(-50%,-50%);box-shadow:0 0 6px #fff}
+.radar-range{position:absolute;bottom:6%;right:8%;font-size:.62rem;color:var(--muted)}
+
+/* Hero — closest */
+.hero{
+  border:1px solid var(--line);background:var(--panel);
+  padding:1.1rem 1.2rem;margin-bottom:1rem;position:relative;overflow:hidden;
+}
+.hero::before{content:"AU-DESSUS DE TA TÊTE";position:absolute;top:.5rem;right:.7rem;
+  font-size:.58rem;letter-spacing:.2em;color:var(--phosphor-dim)}
+.hero .callsign{font-family:'Big Shoulders Display',sans-serif;font-weight:700;
+  font-size:clamp(1.8rem,8vw,2.6rem);color:var(--phosphor);letter-spacing:.05em}
+.hero .type{color:var(--amber);font-size:.85rem;margin-top:.15rem}
+.hero .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.7rem;margin-top:.9rem}
+.hero .grid div{border-left:2px solid var(--phosphor-dim);padding-left:.5rem}
+.hero .grid b{display:block;font-size:1.05rem;font-weight:600;color:var(--text)}
+.hero .grid span{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* List */
+.ac{border:1px solid var(--line);border-left:3px solid var(--phosphor-dim);
+  background:rgba(16,24,20,.7);padding:.7rem .9rem;margin-bottom:.5rem;
+  display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap}
+.ac .id b{color:var(--phosphor);font-weight:600}
+.ac .id small{display:block;color:var(--muted);font-size:.68rem}
+.ac .nums{text-align:right;font-size:.74rem;color:var(--text);line-height:1.5}
+.ac.iss-card{border-left-color:var(--amber)}
+.ac.iss-card .id b{color:var(--amber)}
+
+button{
+  font-family:'IBM Plex Mono',monospace;font-size:.85rem;letter-spacing:.1em;
+  background:transparent;color:var(--phosphor);border:1px solid var(--phosphor-dim);
+  padding:.85rem 1.4rem;cursor:pointer;min-height:44px;width:100%;
+  text-transform:uppercase;transition:background .2s;
+}
+button:hover,button:focus-visible{background:rgba(93,255,156,.1);outline:2px solid var(--phosphor);outline-offset:2px}
+.error{color:var(--danger);font-size:.78rem;padding:.6rem 0;word-break:break-word}
+.empty{color:var(--muted);font-size:.8rem;padding:1rem 0;text-align:center}
+.src{color:var(--muted);font-size:.62rem;letter-spacing:.1em;text-align:right;padding:.2rem 0 .6rem}
+footer{text-align:center;color:var(--muted);font-size:.62rem;padding:1rem;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<header>
+  <h1>AU-DESSUS</h1>
+  <small>radar de poche · v2 multi-sources</small>
+</header>
+<main>
+  <div id="start"><button id="go">▸ Activer le radar (géolocalisation)</button></div>
+  <div class="status" id="status" hidden>
+    <span id="pos">—</span><span class="blink" id="scan">SCAN…</span>
+  </div>
+  <div class="radar-wrap" id="radarwrap" hidden>
+    <div class="radar" id="radar" role="img" aria-label="Radar des aéronefs proches">
+      <div class="sweep"></div><div class="you"></div>
+      <div class="radar-range">50 km</div>
+    </div>
+  </div>
+  <div class="src" id="src"></div>
+  <div id="hero"></div>
+  <div id="list"></div>
+  <div id="msg"></div>
+</main>
+<footer>HOCUSBOOKUS · données ADS-B publiques · rafraîchi toutes les 15 s</footer>
+<script>
+const RADIUS_NM = 27;          // ≈ 50 km
+const RADAR_KM = 50;
+let me = null, timer = null;
+
+const $ = id => document.getElementById(id);
+
+// Sources ADS-B, essayées dans l'ordre. Même format de réponse (champ "ac").
+const SOURCES = [
+  { name: 'adsb.lol',        url: (la,lo,r) => `https://api.adsb.lol/v2/point/${la}/${lo}/${r}` },
+  { name: 'airplanes.live',  url: (la,lo,r) => `https://api.airplanes.live/v2/point/${la}/${lo}/${r}` },
+  { name: 'adsb.fi',         url: (la,lo,r) => `https://opendata.adsb.fi/api/v2/lat/${la}/lon/${lo}/dist/${r}` },
+];
+
+function fetchTimeout(url, ms = 8000){
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), ms);
+  return fetch(url, { signal: ctl.signal }).finally(() => clearTimeout(t));
+}
+
+$('go').addEventListener('click', () => {
+  if (!navigator.geolocation) return showMsg("Géolocalisation non disponible (HTTPS requis).");
+  navigator.geolocation.getCurrentPosition(p => {
+    me = { lat: p.coords.latitude, lon: p.coords.longitude };
+    $('start').hidden = true; $('status').hidden = false; $('radarwrap').hidden = false;
+    $('pos').textContent = `POS ${me.lat.toFixed(4)} / ${me.lon.toFixed(4)}`;
+    tick(); timer = setInterval(tick, 15000);
+  }, err => showMsg("Géoloc refusée ou indisponible : " + err.message), { enableHighAccuracy: true, timeout: 10000 });
+});
+
+function showMsg(t){ $('msg').innerHTML = `<p class="error">${t}</p>`; }
+
+function haversine(a, b){
+  const R = 6371, d = Math.PI/180;
+  const dLat = (b.lat-a.lat)*d, dLon = (b.lon-a.lon)*d;
+  const h = Math.sin(dLat/2)**2 + Math.cos(a.lat*d)*Math.cos(b.lat*d)*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+function bearing(a, b){
+  const d = Math.PI/180;
+  const y = Math.sin((b.lon-a.lon)*d)*Math.cos(b.lat*d);
+  const x = Math.cos(a.lat*d)*Math.sin(b.lat*d)-Math.sin(a.lat*d)*Math.cos(b.lat*d)*Math.cos((b.lon-a.lon)*d);
+  return (Math.atan2(y,x)*180/Math.PI+360)%360;
+}
+const cardinal = b => ["N","NE","E","SE","S","SO","O","NO"][Math.round(b/45)%8];
+const ftToM = ft => typeof ft === 'number' ? Math.round(ft*0.3048) : null;
+
+async function getAircraft(){
+  const errors = [];
+  for (const s of SOURCES){
+    try{
+      const r = await fetchTimeout(s.url(me.lat, me.lon, RADIUS_NM));
+      if (!r.ok) { errors.push(`${s.name}: HTTP ${r.status}`); continue; }
+      const j = await r.json();
+      const raw = j.ac || j.aircraft || [];
+      $('src').textContent = `source : ${s.name}`;
+      return { list: raw, errors };
+    }catch(e){
+      errors.push(`${s.name}: ${e.name === 'AbortError' ? 'timeout' : e.message}`);
+    }
+  }
+  return { list: null, errors };
+}
+
+async function tick(){
+  $('scan').textContent = "SCAN…";
+  const { list: raw, errors } = await getAircraft();
+
+  if (raw === null){
+    $('scan').textContent = "ERREUR";
+    showMsg("Aucune source ADS-B joignable :<br>" + errors.join('<br>'));
+    return;
+  }
+
+  const aircraft = raw
+    .filter(a => a.lat && a.lon)
+    .map(a => ({
+      callsign: (a.flight||'').trim() || a.r || (a.hex||'').toUpperCase() || '???',
+      type: a.t || a.desc || 'type inconnu',
+      reg: a.r || '',
+      alt: a.alt_baro === 'ground' ? 0 : ftToM(a.alt_baro),
+      gs: a.gs ? Math.round(a.gs*1.852) : null,
+      dist: haversine(me, a),
+      brg: bearing(me, a),
+    }))
+    .sort((x,y) => x.dist - y.dist);
+
+  // ISS (non bloquant)
+  let iss = null;
+  try{
+    const v = await fetchTimeout('https://api.wheretheiss.at/v1/satellites/25544', 5000).then(r=>r.json());
+    if (v.latitude){
+      const d = haversine(me, {lat:v.latitude, lon:v.longitude});
+      if (d < 1200) iss = { dist:d, brg:bearing(me,{lat:v.latitude,lon:v.longitude}), alt:Math.round(v.altitude), vel:Math.round(v.velocity) };
+    }
+  }catch(e){ /* ISS optionnelle */ }
+
+  render(aircraft, iss);
+  $('scan').textContent = `${aircraft.length} CONTACT${aircraft.length>1?'S':''}` + (iss ? ' + ISS' : '');
+  if (errors.length) $('msg').innerHTML = `<p class="error" style="color:var(--muted)">sources HS : ${errors.join(' · ')}</p>`;
+  else $('msg').innerHTML = '';
+}
+
+function render(list, iss){
+  const radar = $('radar');
+  radar.querySelectorAll('.blip').forEach(b=>b.remove());
+  list.filter(a=>a.dist<=RADAR_KM).forEach(a=>{
+    const r = (a.dist/RADAR_KM)*48, th = (a.brg-90)*Math.PI/180;
+    const blip = document.createElement('div');
+    blip.className='blip';
+    blip.style.left = (50 + r*Math.cos(th)) + '%';
+    blip.style.top  = (50 + r*Math.sin(th)) + '%';
+    blip.title = a.callsign;
+    radar.appendChild(blip);
+  });
+
+  const h = $('hero');
+  if (list.length){
+    const a = list[0];
+    h.innerHTML = `<div class="hero">
+      <div class="callsign">${a.callsign}</div>
+      <div class="type">${a.type}${a.reg && a.reg!==a.callsign ? ' · '+a.reg : ''}</div>
+      <div class="grid">
+        <div><b>${a.dist.toFixed(1)} km</b><span>distance · ${cardinal(a.brg)}</span></div>
+        <div><b>${a.alt===0?'au sol':(a.alt!=null?a.alt.toLocaleString('fr-FR')+' m':'—')}</b><span>altitude</span></div>
+        <div><b>${a.gs!=null?a.gs+' km/h':'—'}</b><span>vitesse sol</span></div>
+      </div></div>`;
+  } else {
+    h.innerHTML = `<p class="empty">Ciel vide dans un rayon de 50 km. Même les buses font la sieste.</p>`;
+  }
+
+  let html = '';
+  if (iss){
+    html += `<div class="ac iss-card"><div class="id"><b>🛰 ISS — STATION SPATIALE</b>
+      <small>l'astronef demandé, en orbite</small></div>
+      <div class="nums">${Math.round(iss.dist)} km au ${cardinal(iss.brg)} · alt ${iss.alt} km · ${iss.vel.toLocaleString('fr-FR')} km/h</div></div>`;
+  }
+  list.slice(1,9).forEach(a=>{
+    html += `<div class="ac"><div class="id"><b>${a.callsign}</b><small>${a.type}</small></div>
+      <div class="nums">${a.dist.toFixed(1)} km ${cardinal(a.brg)} · ${a.alt===0?'sol':(a.alt!=null?a.alt.toLocaleString('fr-FR')+' m':'— m')} · ${a.gs!=null?a.gs+' km/h':'—'}</div></div>`;
+  });
+  $('list').innerHTML = html;
+}
+</script>
+</body>
+</html>
