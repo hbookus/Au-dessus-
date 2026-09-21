@@ -165,8 +165,11 @@
     </footer>
   </div>
 
-<script src="https://unpkg.com/maplibre-gl@6.10.0/dist/maplibre-gl.js" defer></script>
-<script src="ground-map.js?v=4.0.0" defer></script>
-<script src="app.js?v=3.4.1" defer></script>
+<script type="module">
+    import * as maplibregl from "https://unpkg.com/maplibre-gl@6.10.0/dist/maplibre-gl.mjs";
+    window.maplibregl = maplibregl;
+    await import("./ground-map.js?v=4.0.1");
+    await import("./app.js?v=3.4.1");
+  </script>
 </body>
 </html>
