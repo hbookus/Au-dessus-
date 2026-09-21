@@ -1,0 +1,252 @@
+/* Au-dessus — controls + synchronized ground map */
+[hidden]{display:none!important}
+
+:root{
+  --control-bg:#10233d;
+  --control-fg:#fff;
+  --secondary-bg:rgba(255,255,255,.32);
+  --secondary-fg:var(--ink);
+  --field-bg:rgba(255,255,255,.5);
+  --map-frame:rgba(255,255,255,.28);
+  --map-overlay:rgba(255,255,255,.78);
+}
+
+body[data-theme=night]{
+  --control-bg:#f1f6fb;
+  --control-fg:#0b2440;
+  --secondary-bg:rgba(255,255,255,.14);
+  --secondary-fg:#f4f8fd;
+  --field-bg:rgba(255,255,255,.12);
+  --map-frame:rgba(255,255,255,.16);
+  --map-overlay:rgba(9,26,48,.8);
+}
+
+body[data-theme=sunset]{
+  --control-bg:#102a4c;
+  --control-fg:#fff;
+  --secondary-bg:rgba(255,255,255,.3);
+}
+
+.primary{
+  background:var(--control-bg)!important;
+  color:var(--control-fg)!important;
+  border:1px solid color-mix(in srgb,var(--control-bg) 78%,white 22%)!important;
+  box-shadow:0 8px 22px rgba(7,27,50,.14);
+}
+.primary:hover{filter:brightness(1.04)}
+.primary:disabled{
+  opacity:.5;
+  cursor:wait;
+  box-shadow:none;
+}
+.secondary,.explore-toggle{
+  background:var(--secondary-bg)!important;
+  color:var(--secondary-fg)!important;
+  border-color:var(--line)!important;
+}
+.secondary span,.explore-toggle span,.explore-toggle strong{color:inherit}
+body[data-theme=night] .secondary,
+body[data-theme=night] .explore-toggle{
+  text-shadow:0 1px 0 rgba(0,0,0,.14);
+}
+.place-input-row input{
+  background:var(--field-bg)!important;
+  color:var(--ink)!important;
+}
+body[data-theme=night] .place-input-row input::placeholder{color:rgba(238,246,255,.6)}
+body[data-theme=night] .place-result:hover,
+body[data-theme=night] .explore-toggle:hover{background:rgba(255,255,255,.2)!important}
+
+.ground-card{
+  margin-top:14px;
+  padding:18px;
+  border-radius:30px;
+  overflow:hidden;
+}
+.ground-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  padding:2px 2px 14px;
+}
+.ground-head h2{
+  margin:6px 0 4px;
+  font-size:clamp(1.35rem,3.4vw,2rem);
+  letter-spacing:-.035em;
+}
+.ground-head p{
+  margin:0;
+  color:var(--soft);
+  font-size:12px;
+}
+.map-recenter{
+  flex:0 0 auto;
+  width:44px;
+  height:44px;
+  border-radius:15px;
+  border:1px solid var(--line);
+  background:var(--secondary-bg);
+  color:var(--secondary-fg);
+  font-size:23px;
+  cursor:pointer;
+}
+.map-recenter:focus-visible{
+  outline:3px solid var(--accent);
+  outline-offset:3px;
+}
+.ground-map-wrap{
+  position:relative;
+  border:1px solid var(--map-frame);
+  border-radius:24px;
+  overflow:hidden;
+  background:rgba(8,31,55,.08);
+}
+.ground-map{
+  width:100%;
+  height:320px;
+  z-index:1;
+}
+.map-legend{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  z-index:500;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px 11px;
+  max-width:calc(100% - 24px);
+  padding:7px 10px;
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:999px;
+  background:var(--map-overlay);
+  color:var(--ink);
+  backdrop-filter:blur(16px);
+  font:9px "DM Mono",monospace;
+}
+.map-legend span{display:flex;align-items:center;gap:5px}
+.legend-center{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 3px rgba(36,87,255,.15);
+}
+.legend-plane{font-style:normal;font-size:11px}
+
+.leaflet-container{
+  background:#c8dce8;
+  font-family:Manrope,system-ui,sans-serif;
+}
+.leaflet-control-zoom{
+  border:0!important;
+  box-shadow:none!important;
+}
+.leaflet-control-zoom a{
+  background:var(--map-overlay)!important;
+  color:var(--ink)!important;
+  border-color:var(--line)!important;
+}
+.leaflet-control-attribution{
+  border-radius:10px 0 0 0;
+  background:var(--map-overlay)!important;
+  color:var(--soft)!important;
+  font-size:8px!important;
+}
+.leaflet-control-attribution a{color:inherit!important}
+body[data-theme=night] .leaflet-tile-pane{
+  filter:invert(.9) hue-rotate(180deg) brightness(.68) contrast(.95) saturate(.55);
+}
+body[data-theme=sunset] .leaflet-tile-pane{
+  filter:saturate(.82) sepia(.12) hue-rotate(-8deg);
+}
+body[data-theme=dawn] .leaflet-tile-pane{
+  filter:saturate(.78) sepia(.08);
+}
+
+.au-map-plane{
+  position:relative;
+  width:34px!important;
+  height:34px!important;
+  margin-left:-17px!important;
+  margin-top:-17px!important;
+  border:0!important;
+  background:transparent!important;
+}
+.au-map-plane-inner{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.92);
+  color:#15365a;
+  border:1px solid rgba(13,48,81,.12);
+  box-shadow:0 7px 20px rgba(12,42,72,.22);
+  transition:.16s ease;
+}
+.au-map-plane-inner svg{
+  width:17px;
+  height:17px;
+  transform:rotate(var(--track,0deg));
+}
+.au-map-plane.selected .au-map-plane-inner{
+  width:42px;
+  height:42px;
+  margin:-4px;
+  color:var(--accent);
+  border:2px solid var(--accent);
+  box-shadow:0 0 0 6px rgba(36,87,255,.12),0 10px 24px rgba(12,42,72,.24);
+}
+.au-map-plane.no-track .au-map-plane-inner{
+  font-size:22px;
+  line-height:1;
+}
+.au-map-center{
+  width:18px!important;
+  height:18px!important;
+  margin-left:-9px!important;
+  margin-top:-9px!important;
+  background:transparent!important;
+  border:0!important;
+}
+.au-map-center-dot{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#fff;
+  border:4px solid var(--accent);
+  box-shadow:0 0 0 8px rgba(36,87,255,.14),0 4px 14px rgba(10,40,70,.22);
+}
+.au-map-label{
+  background:var(--map-overlay)!important;
+  border:1px solid var(--line)!important;
+  color:var(--ink)!important;
+  border-radius:999px!important;
+  box-shadow:none!important;
+  padding:3px 7px!important;
+  font:9px "DM Mono",monospace!important;
+}
+.au-map-label:before{display:none}
+.map-fallback{
+  min-height:220px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:28px;
+  color:var(--soft);
+  font-size:12px;
+}
+
+@media(max-width:760px){
+  .ground-card{padding:14px;border-radius:27px}
+  .ground-map{height:265px}
+  .ground-head{padding-bottom:11px}
+  .map-legend{right:10px;left:10px;width:max-content;max-width:calc(100% - 20px)}
+}
+@media(max-width:430px){
+  .ground-map{height:245px}
+  .ground-head h2{font-size:1.35rem}
+  .ground-head p{font-size:11px}
+}
