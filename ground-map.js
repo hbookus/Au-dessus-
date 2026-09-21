@@ -14,6 +14,9 @@
   let selectedKey = null;
 
   const $ = (id) => document.getElementById(id);
+  const TILE_URL = location.hostname.endsWith("github.io")
+    ? "https://au-dessus.vercel.app/api/tile?z={z}&x={x}&y={y}"
+    : "/api/tile?z={z}&x={x}&y={y}";
 
   function cssVar(name, fallback) {
     const value = getComputedStyle(document.body).getPropertyValue(name).trim();
@@ -37,11 +40,19 @@
       maxZoom: 18,
     });
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    const tileLayer = L.tileLayer(TILE_URL, {
       maxZoom: 19,
-      subdomains: "abc",
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>',
     }).addTo(map);
+
+    let tileErrors = 0;
+    tileLayer.on("tileerror", () => {
+      tileErrors += 1;
+      if (tileErrors >= 4) {
+        const warning = document.getElementById("mapTileWarning");
+        if (warning) warning.hidden = false;
+      }
+    });
 
     aircraftLayer = L.layerGroup().addTo(map);
 
@@ -99,6 +110,11 @@
     $("groundLocation").textContent = centerMode === "geo"
       ? "Ta position au sol, avec les mêmes appareils que dans le ciel."
       : `Autour de ${label}.`;
+
+    const recenterText = $("mapRecenterText");
+    if (recenterText) recenterText.textContent = centerMode === "geo" ? "Sur moi" : "Sur ce lieu";
+    const recenterButton = $("mapRecenter");
+    if (recenterButton) recenterButton.setAttribute("aria-label", centerMode === "geo" ? "Recentrer la carte sur ma position" : "Recentrer la carte sur le lieu observé");
 
     if (centerMarker) centerMarker.remove();
     centerMarker = L.marker([center.lat, center.lon], {
