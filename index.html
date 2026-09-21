@@ -34,13 +34,32 @@
 
         <div class="start-card" id="startCard">
           <div class="start-copy">
-            <strong>Ta position reste dans ton navigateur.</strong>
-            <span>Elle sert uniquement à chercher les aéronefs autour de toi.</span>
+            <strong>Ta position précise n’est pas conservée.</strong>
+            <span>Elle est arrondie à environ 100 m avant d’interroger le trafic aérien.</span>
           </div>
           <button class="primary" id="go" type="button">
             Voir mon ciel
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
+        </div>
+
+        <div class="explore-box">
+          <button class="explore-toggle" id="exploreToggle" type="button" aria-expanded="false" aria-controls="placePanel">
+            <span><strong>Explorer un autre ciel</strong><small>Ville, lieu ou coordonnées GPS</small></span>
+            <span aria-hidden="true">⌖</span>
+          </button>
+          <div class="place-panel" id="placePanel" hidden>
+            <form class="place-form" id="placeForm">
+              <label for="placeInput">Où veux-tu regarder ?</label>
+              <div class="place-input-row">
+                <input id="placeInput" name="place" type="search" inputmode="search" autocomplete="off" placeholder="Annecy, Liège, JFK ou 45.90, 6.12" maxlength="120">
+                <button class="primary compact" type="submit">Chercher</button>
+              </div>
+              <p class="place-hint">Pas d’autocomplétion : la recherche part seulement quand tu valides.</p>
+            </form>
+            <div class="place-results" id="placeResults" aria-live="polite"></div>
+            <div class="geo-attrib" id="geoAttrib" hidden>Recherche de lieux © OpenStreetMap contributors</div>
+          </div>
         </div>
       </section>
 
@@ -56,7 +75,7 @@
           <div class="range">rayon 50 km</div>
           <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
           <div class="cross-x"></div><div class="cross-y"></div>
-          <div class="me"><div class="me-dot"></div><div class="me-label">toi</div></div>
+          <div class="me"><div class="me-dot"></div><div class="me-label" id="meLabel">toi</div></div>
           <div id="planes"></div>
           <div class="quiet" id="quiet" hidden>
             <div class="quiet-icon">☁</div><strong>Le ciel est calme.</strong><span>Aucun appareil détecté dans les 50 km. Profite : ça ne dure jamais très longtemps.</span>
@@ -72,7 +91,7 @@
             <div class="stats">
               <div class="stat"><b id="altitude">—</b><span>altitude</span></div>
               <div class="stat"><b id="speed">—</b><span>vitesse sol</span></div>
-              <div class="stat"><b id="heading">—</b><span>cap</span></div>
+              <div class="stat"><b id="heading">—</b><span>route sol</span></div>
             </div>
           </article>
 
@@ -83,6 +102,7 @@
             <div class="mini-actions">
               <button class="secondary" id="refresh" type="button"><span>Actualiser maintenant</span><span>↻</span></button>
               <button class="secondary" id="share" type="button"><span>Partager ce ciel</span><span>↗</span></button>
+              <button class="secondary" id="changeSky" type="button"><span>Explorer un autre ciel</span><span>⌖</span></button>
             </div>
           </aside>
         </div>
@@ -95,6 +115,27 @@
         </section>
       </section>
     </main>
+
+    <dialog class="aircraft-dialog" id="aircraftDialog">
+      <div class="aircraft-sheet">
+        <button class="dialog-close" id="dialogClose" type="button" aria-label="Fermer">×</button>
+        <div class="kicker">fiche appareil</div>
+        <div class="dialog-title-row">
+          <div>
+            <h2 id="detailCallsign">—</h2>
+            <p id="detailIdentity">—</p>
+          </div>
+          <div class="dialog-plane" id="detailPlane" aria-hidden="true">✈</div>
+        </div>
+        <div class="detail-hero">
+          <strong id="detailDistance">—</strong>
+          <span id="detailRelative">—</span>
+        </div>
+        <div class="detail-grid" id="detailGrid"></div>
+        <p class="detail-note" id="detailNote"></p>
+        <a class="secondary detail-source" id="detailSourceLink" href="#" target="_blank" rel="noreferrer">Voir la donnée source <span>↗</span></a>
+      </div>
+    </dialog>
 
     <footer>
       <span>AU-DESSUS · une expérience Hocusbookus</span>
