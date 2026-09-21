@@ -155,15 +155,10 @@ body[data-theme=night] .explore-toggle:hover{background:rgba(255,255,255,.2)!imp
   font-size:8px!important;
 }
 .leaflet-control-attribution a{color:inherit!important}
-body[data-theme=night] .leaflet-tile-pane{
-  filter:invert(.9) hue-rotate(180deg) brightness(.68) contrast(.95) saturate(.55);
-}
-body[data-theme=sunset] .leaflet-tile-pane{
-  filter:saturate(.82) sepia(.12) hue-rotate(-8deg);
-}
-body[data-theme=dawn] .leaflet-tile-pane{
-  filter:saturate(.78) sepia(.08);
-}
+body[data-theme=night] .leaflet-container{background:#10283f}
+body[data-theme=night] .leaflet-tile{opacity:.78}
+body[data-theme=sunset] .leaflet-tile{opacity:.92}
+body[data-theme=dawn] .leaflet-tile{opacity:.94}
 
 .au-map-plane{
   position:relative;
