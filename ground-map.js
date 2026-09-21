@@ -89,8 +89,8 @@
 
   function recenter(animate = false) {
     if (!map || !center) return;
-    const circle = L.circle([center.lat, center.lon], { radius: 50000 });
-    map.fitBounds(circle.getBounds(), {
+    const bounds = L.latLng(center.lat, center.lon).toBounds(100000);
+    map.fitBounds(bounds, {
       padding: [18, 18],
       maxZoom: 9,
       animate,
@@ -115,6 +115,10 @@
     if (recenterText) recenterText.textContent = centerMode === "geo" ? "Sur moi" : "Sur ce lieu";
     const recenterButton = $("mapRecenter");
     if (recenterButton) recenterButton.setAttribute("aria-label", centerMode === "geo" ? "Recentrer la carte sur ma position" : "Recentrer la carte sur le lieu observé");
+
+    if (!map._loaded) {
+      map.setView([center.lat, center.lon], 8, { animate: false });
+    }
 
     if (centerMarker) centerMarker.remove();
     centerMarker = L.marker([center.lat, center.lon], {
