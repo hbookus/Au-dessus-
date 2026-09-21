@@ -325,6 +325,7 @@
     if (!aircraft) return;
     selectedKey = key;
     renderDetails(aircraft);
+    window.dispatchEvent(new CustomEvent("au-dessus:selected", { detail: { key, source: "app" } }));
     const dialog = $("aircraftDialog");
     if (typeof dialog.showModal === "function") dialog.showModal();
     else dialog.setAttribute("open", "");
@@ -332,6 +333,7 @@
 
   function closeDetails() {
     selectedKey = null;
+    window.dispatchEvent(new CustomEvent("au-dessus:selected", { detail: { key: null, source: "app" } }));
     const dialog = $("aircraftDialog");
     if (typeof dialog.close === "function") dialog.close();
     else dialog.removeAttribute("open");
@@ -345,6 +347,9 @@
     renderClosest(list[0]);
     renderMood(list);
     renderList(list);
+    window.dispatchEvent(new CustomEvent("au-dessus:aircraft", {
+      detail: { aircraft: list, center, mode: centerMode, label: centerLabel }
+    }));
 
     if (selectedKey) {
       const selected = list.find((item) => item.key === selectedKey);
@@ -390,6 +395,9 @@
     document.querySelector(".sky-label strong").textContent = mode === "geo" ? "Ton ciel maintenant" : "Le ciel choisi";
     $("startCard").hidden = true;
     $("app").classList.add("active");
+    window.dispatchEvent(new CustomEvent("au-dessus:center", {
+      detail: { center: { ...center }, mode: centerMode, label: centerLabel }
+    }));
     tick();
     clearInterval(timer);
     timer = setInterval(tick, REFRESH_MS);
@@ -499,6 +507,10 @@
       return;
     }
     searchPlace(query);
+  });
+  window.addEventListener("au-dessus:open-aircraft", (event) => {
+    const key = event.detail?.key;
+    if (key) openDetails(key);
   });
   $("dialogClose").addEventListener("click", closeDetails);
   $("aircraftDialog").addEventListener("click", (event) => {
