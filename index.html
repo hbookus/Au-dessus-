@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#8ecdf5">
+  <meta name="description" content="Au-dessus — découvre en direct les avions qui traversent le ciel autour de toi.">
+  <title>AU-DESSUS — le ciel en direct</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sky-decor" aria-hidden="true">
+    <div class="orb"></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+  </div>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span>✈</span></div>
+        <div>AU-DESSUS<small>le ciel, en direct</small></div>
+      </div>
+      <div class="live-pill"><span class="live-dot"></span><span id="liveText">prêt à regarder</span></div>
+    </header>
+
+    <main>
+      <section class="intro" id="intro">
+        <div class="eyebrow">50 km de ciel autour de toi</div>
+        <h1>Regarde<br>en l’air.</h1>
+        <p>Quel avion passe au-dessus de toi maintenant ? Autorise ta position et Au-dessus transforme le trafic aérien réel en petite fenêtre sur le ciel.</p>
+
+        <div class="start-card" id="startCard">
+          <div class="start-copy">
+            <strong>Ta position reste dans ton navigateur.</strong>
+            <span>Elle sert uniquement à chercher les aéronefs autour de toi.</span>
+          </div>
+          <button class="primary" id="go" type="button">
+            Voir mon ciel
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="app" id="app" aria-live="polite">
+        <div class="meta-row">
+          <div class="chip">POSITION <strong id="pos">—</strong></div>
+          <div class="chip">SOURCE <strong id="source">—</strong></div>
+          <div class="chip">MISE À JOUR <strong id="updated">—</strong></div>
+        </div>
+
+        <div class="sky-card" id="skyCard">
+          <div class="sky-label"><strong>Ton ciel maintenant</strong><span id="contactCount">recherche…</span></div>
+          <div class="range">rayon 50 km</div>
+          <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+          <div class="cross-x"></div><div class="cross-y"></div>
+          <div class="me"><div class="me-dot"></div><div class="me-label">toi</div></div>
+          <div id="planes"></div>
+          <div class="quiet" id="quiet" hidden>
+            <div class="quiet-icon">☁</div><strong>Le ciel est calme.</strong><span>Aucun appareil détecté dans les 50 km. Profite : ça ne dure jamais très longtemps.</span>
+          </div>
+        </div>
+
+        <div class="details-grid">
+          <article class="glass closest-card" id="closestCard">
+            <div class="kicker">le plus proche</div>
+            <div class="flight-title" id="flightTitle">—</div>
+            <div class="flight-sub" id="flightSub">En attente du ciel…</div>
+            <div class="distance-line"><strong id="distance">—</strong><span id="direction">km</span></div>
+            <div class="stats">
+              <div class="stat"><b id="altitude">—</b><span>altitude</span></div>
+              <div class="stat"><b id="speed">—</b><span>vitesse sol</span></div>
+              <div class="stat"><b id="heading">—</b><span>cap</span></div>
+            </div>
+          </article>
+
+          <aside class="glass side-card">
+            <div class="kicker">petite lecture du ciel</div>
+            <h2 id="skyMood">Ça bouge là-haut.</h2>
+            <p class="side-message" id="skyMessage">Les données arrivent directement de réseaux ADS-B publics et peuvent varier selon la couverture des récepteurs au sol.</p>
+            <div class="mini-actions">
+              <button class="secondary" id="refresh" type="button"><span>Actualiser maintenant</span><span>↻</span></button>
+              <button class="secondary" id="share" type="button"><span>Partager ce ciel</span><span>↗</span></button>
+            </div>
+          </aside>
+        </div>
+
+        <div class="notice" id="notice"></div>
+
+        <section class="traffic">
+          <div class="section-head"><h2>Dans les parages</h2><span id="listCount">0 appareil</span></div>
+          <div class="traffic-list" id="trafficList"></div>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <span>AU-DESSUS · une expérience Hocusbookus</span>
+      <span>Données aériennes : <a href="https://airplanes.live" target="_blank" rel="noreferrer">airplanes.live</a> · <a href="https://www.adsb.lol" target="_blank" rel="noreferrer">adsb.lol</a> · <a href="https://adsb.fi" target="_blank" rel="noreferrer">adsb.fi</a></span>
+    </footer>
+  </div>
+
+<script src="app.js" defer></script>
+</body>
+</html>
