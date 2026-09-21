@@ -250,3 +250,38 @@ body[data-theme=dawn] .leaflet-tile-pane{
   .ground-head h2{font-size:1.35rem}
   .ground-head p{font-size:11px}
 }
+
+.map-recenter{
+  width:auto!important;
+  min-width:44px;
+  padding:0 13px!important;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  font-weight:800;
+  font-size:12px!important;
+}
+.map-recenter > span:first-child{font-size:21px;line-height:1}
+.map-recenter > span:last-child{white-space:nowrap}
+.map-tile-warning{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  z-index:520;
+  width:min(82%,360px);
+  padding:11px 13px;
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:16px;
+  background:var(--map-overlay);
+  color:var(--ink);
+  backdrop-filter:blur(16px);
+  text-align:center;
+  font-size:11px;
+  line-height:1.45;
+}
+@media(max-width:430px){
+  .map-recenter{padding:0 11px!important}
+  .map-recenter > span:last-child{font-size:11px}
+}
