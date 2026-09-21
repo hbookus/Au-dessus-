@@ -9,7 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="map.css">
 </head>
 <body>
   <div class="sky-decor" aria-hidden="true">
@@ -83,6 +85,24 @@
           </div>
         </div>
 
+        <section class="ground-card glass" id="groundCard" aria-labelledby="groundTitle">
+          <div class="ground-head">
+            <div>
+              <div class="kicker">sous ce ciel</div>
+              <h2 id="groundTitle">Où passent-ils vraiment ?</h2>
+              <p id="groundLocation">La carte se cale sur le point observé.</p>
+            </div>
+            <button class="map-recenter" id="mapRecenter" type="button" aria-label="Recentrer la carte" title="Recentrer la carte">◎</button>
+          </div>
+          <div class="ground-map-wrap">
+            <div id="groundMap" class="ground-map" role="region" aria-label="Carte des aéronefs autour du point observé"></div>
+            <div class="map-legend" aria-hidden="true">
+              <span><i class="legend-center"></i> point observé</span>
+              <span><i class="legend-plane">✈</i> aéronef</span>
+            </div>
+          </div>
+        </section>
+
         <div class="details-grid">
           <article class="glass closest-card" id="closestCard">
             <div class="kicker">le plus proche</div>
@@ -144,6 +164,8 @@
     </footer>
   </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script src="ground-map.js" defer></script>
 <script src="app.js" defer></script>
 </body>
 </html>
